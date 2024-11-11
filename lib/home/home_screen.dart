@@ -5,6 +5,8 @@ import 'package:flutter_store_app/utils/colors.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  static const tag = "/home";
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
       children: [
         InkWell(
           onTap: () {},
-          child: Container(
+          child: const SizedBox(
             height: 30,
             width: 40,
             child: Icon(Icons.drag_indicator_sharp),
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
         const SizedBox(width: 255),
         InkWell(
           onTap: () {},
-          child: Container(
+          child: const SizedBox(
             height: 30,
             width: 40,
             child: Icon(Icons.shopping_bag_outlined),
@@ -62,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
         ),
         InkWell(
           onTap: () {},
-          child: Container(
+          child: const SizedBox(
             height: 30,
             width: 40,
             child: Icon(Icons.notifications),
@@ -74,11 +76,42 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
 
   Widget discountCard() {
     return Container(
+      padding: const EdgeInsets.all(16.0),
       height: 200,
       width: mediaWidth,
       decoration: BoxDecoration(
         color: CustomColors.orange,
         borderRadius: BorderRadius.circular(16.0),
+        image: const DecorationImage(
+          image: AssetImage("assets/ads.jpeg"),
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            "50\$ OFF",
+            style: TextStyle(
+              fontSize: 20,
+              color: CustomColors.white,
+            ),
+          ),
+          const Text(
+            "ON EVERYTHING TODAY",
+            style: TextStyle(
+              color: CustomColors.white,
+            ),
+          ),
+          const SizedBox(height: 40),
+          SizedBox(
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text("Clothes"),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -88,39 +121,45 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text("Botão"),
-          ),
+          buildButton("Clothes"),
+          buildButton("Shoes"),
+          buildButton("Men"),
+          buildButton("Women"),
+          buildButton("Kids"),
         ],
+      ),
+    );
+  }
+
+  Widget buildButton(String text) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          activeButton = text;
+        });
+      },
+      child: Container(
+        height: 40,
+        width: 100,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: colorChange(text),
+          ),
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: activeButton == text
+                  ? CustomColors.white
+                  : CustomColors.black,
+              fontSize: 18,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -132,17 +171,91 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
       itemCount: 6,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.9,
+        childAspectRatio: 0.45,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
       itemBuilder: (context, index) {
-        return Container(
-          height: 50,
-          color: CustomColors.green,
-          child: Text("Item $index"),
-        );
+        return productCard();
       },
+    );
+  }
+
+  Widget productCard() {
+    return Column(
+      children: [
+        Container(
+          height: 250,
+          decoration: BoxDecoration(
+            color: CustomColors.limedAsh,
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+        const Row(
+          children: [
+            Column(
+              children: [
+                Text(
+                  "Sportswear",
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Cinzel dresses",
+                  style: TextStyle(
+                    color: CustomColors.grey,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: 20),
+            Icon(
+              Icons.star,
+              color: CustomColors.yellowAccent,
+            ),
+            Text("4.5"),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "\$64.90",
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      CustomColors.limedAsh,
+                      CustomColors.greyGreen,
+                      CustomColors.sage,
+                    ],
+                  ),
+                  shape: BoxShape.circle,
+                  color: Colors.amber,
+                ),
+                child: const Icon(
+                  Icons.shopping_bag_outlined,
+                  color: CustomColors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
