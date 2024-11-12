@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_store_app/home/home_mixin.dart';
+import 'package:flutter_store_app/mixin/mixin.dart';
+import 'package:flutter_store_app/product_screen/product_screen.dart';
 import 'package:flutter_store_app/utils/colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with HomeMixin {
+class _HomeScreenState extends State<HomeScreen> with Mixin {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
     return InkWell(
       onTap: () {
         setState(() {
-          activeButton = text;
+          activeButtonHome = text;
         });
       },
       child: Container(
@@ -153,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
           child: Text(
             text,
             style: TextStyle(
-              color: activeButton == text
+              color: activeButtonHome == text
                   ? CustomColors.white
                   : CustomColors.black,
               fontSize: 18,
@@ -168,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: 6,
+      itemCount: products.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.45,
@@ -176,86 +177,100 @@ class _HomeScreenState extends State<HomeScreen> with HomeMixin {
         mainAxisSpacing: 10,
       ),
       itemBuilder: (context, index) {
-        return productCard();
+        return productCard(products[index]);
       },
     );
   }
 
-  Widget productCard() {
-    return Column(
-      children: [
-        Container(
-          height: 250,
-          decoration: BoxDecoration(
-            color: CustomColors.limedAsh,
-            borderRadius: BorderRadius.circular(16.0),
+  Widget productCard(Map<String, dynamic> product) {
+    List img = product["images"];
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          ProductScreen.tag,
+          arguments: ProductScreenArgs(product: product),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 250,
+            decoration: BoxDecoration(
+              color: CustomColors.limedAsh,
+              borderRadius: BorderRadius.circular(16.0),
+              image: DecorationImage(
+                image: AssetImage(img[0]),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        const Row(
-          children: [
-            Column(
-              children: [
-                Text(
-                  "Sportswear",
-                  style: TextStyle(
-                    color: CustomColors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+          const Row(
+            children: [
+              Column(
+                children: [
+                  Text(
+                    "Sportswear",
+                    style: TextStyle(
+                      color: CustomColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                  "Cinzel dresses",
-                  style: TextStyle(
-                    color: CustomColors.grey,
+                  Text(
+                    "Cinzel dresses",
+                    style: TextStyle(
+                      color: CustomColors.grey,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(width: 20),
-            Icon(
-              Icons.star,
-              color: CustomColors.yellowAccent,
-            ),
-            Text("4.5"),
-          ],
-        ),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "\$64.90",
-              style: TextStyle(
-                fontSize: 18,
+                ],
               ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      CustomColors.limedAsh,
-                      CustomColors.greyGreen,
-                      CustomColors.sage,
-                    ],
-                  ),
-                  shape: BoxShape.circle,
-                  color: Colors.amber,
-                ),
-                child: const Icon(
-                  Icons.shopping_bag_outlined,
-                  color: CustomColors.white,
+              SizedBox(width: 20),
+              Icon(
+                Icons.star,
+                color: CustomColors.yellowAccent,
+              ),
+              Text("4.5"),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                product["price"],
+                style: const TextStyle(
+                  fontSize: 18,
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        CustomColors.limedAsh,
+                        CustomColors.greyGreen,
+                        CustomColors.sage,
+                      ],
+                    ),
+                    shape: BoxShape.circle,
+                    color: Colors.amber,
+                  ),
+                  child: const Icon(
+                    Icons.shopping_bag_outlined,
+                    color: CustomColors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

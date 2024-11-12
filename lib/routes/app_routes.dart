@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_store_app/home/home_screen.dart';
+import 'package:flutter_store_app/product_screen/product_screen.dart';
 import 'package:flutter_store_app/splash/splash_screen.dart';
 
 class AppRoutes {
@@ -15,6 +16,9 @@ class AppRoutes {
         return const SplashScreen();
       case HomeScreen.tag:
         return const HomeScreen();
+      case ProductScreen.tag:
+        ProductScreenArgs args = settings.arguments as ProductScreenArgs;
+        return ProductScreen(product: args.product!);
       default:
         return null;
     }
