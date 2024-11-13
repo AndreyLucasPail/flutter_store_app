@@ -8,8 +8,10 @@ class CustomColors {
   static const Color blue = Color(0xFF2196F3);
   static const Color green = Color(0xFF4CAF50);
   static const Color grey = Color(0xFF9E9E9E);
+  static const Color grey300 = Color(0xFFE0E0E0);
   static const Color yellowAccent = Color(0xFFFFFF00);
   static const Color limedAsh = Color(0xFF718355);
   static const Color greyGreen = Color(0xFF87986A);
   static const Color sage = Color(0xFF97A97C);
+  static const Color snow = Color(0xFFF7FCFF);
 }

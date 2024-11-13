@@ -105,7 +105,7 @@ mixin Mixin<T extends StatefulWidget> on State<T> {
       "sizes": ["L", "M", "S", "XL"],
       "price": "78,90\$",
       "images": [
-        "assets/Camisa1.png",
+        "assets/camisa1.png",
         "assets/camisa12.png",
         "assets/camisa13.png",
         "assets/camisa14.png",
@@ -148,6 +148,22 @@ mixin Mixin<T extends StatefulWidget> on State<T> {
         "assets/calça22.png",
         "assets/calça23.png",
         "assets/calça24.png",
+      ],
+    },
+  ];
+
+  List<Map<String, dynamic>> cartItems = [
+    {
+      "title": "Basic Solid Bodycon Dress",
+      "description":
+          "This style is suitable for youn people when they want to attend semi-formal.",
+      "sizes": ["L", "M", "S", "XL"],
+      "price": "78,90",
+      "images": [
+        "assets/camisa1.png",
+        "assets/camisa12.png",
+        "assets/camisa13.png",
+        "assets/camisa14.png",
       ],
     },
   ];

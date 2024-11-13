@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> with Mixin {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: CustomColors.snow,
         body: body(),
       ),
     );

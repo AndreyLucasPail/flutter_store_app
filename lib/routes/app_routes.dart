@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/cart/cart_screen.dart';
 import 'package:flutter_store_app/home/home_screen.dart';
 import 'package:flutter_store_app/product_screen/product_screen.dart';
 import 'package:flutter_store_app/splash/splash_screen.dart';
@@ -19,6 +20,8 @@ class AppRoutes {
       case ProductScreen.tag:
         ProductScreenArgs args = settings.arguments as ProductScreenArgs;
         return ProductScreen(product: args.product!);
+      case CartScreen.tag:
+        return const CartScreen();
       default:
         return null;
     }

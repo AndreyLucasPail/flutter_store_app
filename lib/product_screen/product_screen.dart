@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/cart/cart_screen.dart';
 import 'package:flutter_store_app/mixin/mixin.dart';
 import 'package:flutter_store_app/utils/colors.dart';
 
@@ -23,6 +24,7 @@ class _ProductScreenState extends State<ProductScreen> with Mixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.snow,
       body: body(),
     );
   }
@@ -291,7 +293,9 @@ class _ProductScreenState extends State<ProductScreen> with Mixin {
 
   Widget checkOut() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, CartScreen.tag);
+      },
       child: Container(
         height: 50,
         width: mediaWidth * 0.9,
