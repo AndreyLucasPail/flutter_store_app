@@ -19,9 +19,12 @@ class AppRoutes {
         return const HomeScreen();
       case ProductScreen.tag:
         ProductScreenArgs args = settings.arguments as ProductScreenArgs;
+
         return ProductScreen(product: args.product!);
       case CartScreen.tag:
-        return const CartScreen();
+        CartScreenArgs arg = settings.arguments as CartScreenArgs;
+
+        return CartScreen(product: arg.product);
       default:
         return null;
     }

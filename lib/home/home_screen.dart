@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/cart/cart_screen.dart';
 import 'package:flutter_store_app/mixin/mixin.dart';
 import 'package:flutter_store_app/product_screen/product_screen.dart';
 import 'package:flutter_store_app/utils/colors.dart';
@@ -57,7 +58,15 @@ class _HomeScreenState extends State<HomeScreen> with Mixin {
         ),
         const SizedBox(width: 255),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              CartScreen.tag,
+              arguments: CartScreenArgs(
+                product: cartItems,
+              ),
+            );
+          },
           child: const SizedBox(
             height: 30,
             width: 40,

@@ -292,9 +292,21 @@ class _ProductScreenState extends State<ProductScreen> with Mixin {
   }
 
   Widget checkOut() {
+    List img = widget.product["images"];
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, CartScreen.tag);
+        cartItems.add({
+          "title": widget.product["title"],
+          "price": widget.product["price"],
+          "img": img.first,
+          "size": activeButton,
+          "quantity": 1,
+        });
+        Navigator.pushNamed(
+          context,
+          CartScreen.tag,
+          arguments: CartScreenArgs(product: cartItems),
+        );
       },
       child: Container(
         height: 50,

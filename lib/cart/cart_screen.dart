@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_store_app/mixin/mixin.dart';
 import 'package:flutter_store_app/utils/colors.dart';
 
+class CartScreenArgs {
+  CartScreenArgs({this.product});
+
+  List<Map<String, dynamic>>? product;
+}
+
 class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+  const CartScreen({super.key, this.product});
 
   static const tag = "/cart";
+
+  final List<Map<String, dynamic>>? product;
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -81,14 +89,13 @@ class _CartScreenState extends State<CartScreen> with Mixin {
 
   Widget cartProducts() {
     return Column(
-      children: cartItems.map((product) {
+      children: widget.product!.map((product) {
         return productsCard(product);
       }).toList(),
     );
   }
 
   Widget productsCard(Map<String, dynamic> product) {
-    List imgs = product["images"];
     return Row(
       children: [
         Container(
@@ -97,7 +104,7 @@ class _CartScreenState extends State<CartScreen> with Mixin {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             image: DecorationImage(
-              image: AssetImage(imgs.first),
+              image: AssetImage(product["img"]),
             ),
           ),
         ),
@@ -133,9 +140,9 @@ class _CartScreenState extends State<CartScreen> with Mixin {
                   child: const Icon(Icons.remove),
                 ),
                 const SizedBox(width: 10),
-                const Text(
-                  "1",
-                  style: TextStyle(
+                Text(
+                  "${product["quantity"]}",
+                  style: const TextStyle(
                     color: CustomColors.black,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -156,9 +163,9 @@ class _CartScreenState extends State<CartScreen> with Mixin {
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  child: const Text(
-                    "L",
-                    style: TextStyle(
+                  child: Text(
+                    product["size"],
+                    style: const TextStyle(
                       color: CustomColors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
