@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_store_app/mixin/mixin.dart';
+import 'package:flutter_store_app/mixin/products_mixin.dart';
+import 'package:flutter_store_app/model/cart_model.dart';
 import 'package:flutter_store_app/utils/colors.dart';
 
 class CartScreenArgs {
@@ -20,7 +21,7 @@ class CartScreen extends StatefulWidget {
   State<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> with Mixin {
+class _CartScreenState extends State<CartScreen> with ProdutsMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,13 +90,16 @@ class _CartScreenState extends State<CartScreen> with Mixin {
 
   Widget cartProducts() {
     return Column(
-      children: widget.product!.map((product) {
-        return productsCard(product);
-      }).toList(),
+      children: List.generate(
+        cart.cartItems.length,
+        (index) {
+          return productsCard(cart.cartItems[index], index);
+        },
+      ),
     );
   }
 
-  Widget productsCard(Map<String, dynamic> product) {
+  Widget productsCard(CartModel product, int index) {
     return Row(
       children: [
         Container(
@@ -104,7 +108,7 @@ class _CartScreenState extends State<CartScreen> with Mixin {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             image: DecorationImage(
-              image: AssetImage(product["img"]),
+              image: AssetImage(product.img!),
             ),
           ),
         ),
@@ -113,7 +117,7 @@ class _CartScreenState extends State<CartScreen> with Mixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AutoSizeText(
-              product["title"],
+              product.title!,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -121,7 +125,7 @@ class _CartScreenState extends State<CartScreen> with Mixin {
             ),
             const SizedBox(height: 5),
             Text(
-              "\$${product["price"]}",
+              "\$${product.totalPrice}",
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -141,7 +145,7 @@ class _CartScreenState extends State<CartScreen> with Mixin {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  "${product["quantity"]}",
+                  "${product.quantity}",
                   style: const TextStyle(
                     color: CustomColors.black,
                     fontSize: 18,
@@ -158,13 +162,13 @@ class _CartScreenState extends State<CartScreen> with Mixin {
                   ),
                   child: const Icon(Icons.add),
                 ),
-                const SizedBox(width: 100),
+                const SizedBox(width: 90),
                 Container(
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
                   child: Text(
-                    product["size"],
+                    product.size!,
                     style: const TextStyle(
                       color: CustomColors.black,
                       fontSize: 20,
@@ -172,9 +176,9 @@ class _CartScreenState extends State<CartScreen> with Mixin {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 10),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => cart.removeItem(index),
                   icon: const Icon(
                     Icons.delete,
                     color: CustomColors.red,
@@ -191,11 +195,11 @@ class _CartScreenState extends State<CartScreen> with Mixin {
   Widget totalPrice() {
     return Column(
       children: [
-        textRow("Subtotal:", "\$ 435.00"),
+        textRow("Subtotal:", "${cart.totalPrice}"),
         const SizedBox(height: 30),
         textRow("Shipping", "\$ 5.00"),
         const Divider(),
-        textRow("Bag Total:", "\$ 440.0"),
+        textRow("Bag Total:", "\$ ${cart.totalPrice + 5.0}"),
       ],
     );
   }

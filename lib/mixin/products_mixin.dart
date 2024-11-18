@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/provider/cart_provider.dart';
 import 'package:flutter_store_app/utils/colors.dart';
+import 'package:provider/provider.dart';
 
-mixin Mixin<T extends StatefulWidget> on State<T> {
+mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   late double mediaHeight = MediaQuery.of(context).size.height;
   late double mediaWidth = MediaQuery.of(context).size.width;
   String activeButtonHome = "Clothes";
   String activeButton = "";
+
+  late final cart = Provider.of<CartProvider>(context, listen: false);
 
   List<Color> colorChange(String text) {
     if (activeButtonHome == text) {
@@ -45,26 +49,28 @@ mixin Mixin<T extends StatefulWidget> on State<T> {
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90",
+      "price": 78.90,
       "images": [
         "assets/camisa1.png",
         "assets/camisa12.png",
         "assets/camisa13.png",
         "assets/camisa14.png",
       ],
+      "id": 1,
     },
     {
       "title": "Basic Solid Bodycon Dress",
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90",
+      "price": 78.90,
       "images": [
         "assets/camisa2.png",
         "assets/camisa22.png",
         "assets/camisa23.png",
         "assets/camisa24.png",
       ],
+      "id": 2,
     },
   ];
 
@@ -74,26 +80,28 @@ mixin Mixin<T extends StatefulWidget> on State<T> {
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90",
+      "price": 78.90,
       "images": [
         "assets/calça1.png",
         "assets/calça12.png",
         "assets/calça13.png",
         "assets/calça14.png",
       ],
+      "id": 3,
     },
     {
       "title": "Basic Solid Bodycon Dress",
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90",
+      "price": 78.90,
       "images": [
         "assets/calça2.png",
         "assets/calça22.png",
         "assets/calça23.png",
         "assets/calça24.png",
       ],
+      "id": 4,
     },
   ];
 
@@ -103,54 +111,56 @@ mixin Mixin<T extends StatefulWidget> on State<T> {
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90\$",
+      "price": 78.90,
       "images": [
         "assets/camisa1.png",
         "assets/camisa12.png",
         "assets/camisa13.png",
         "assets/camisa14.png",
       ],
+      "id": 1,
     },
     {
       "title": "Basic Solid Bodycon Dress",
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90\$",
+      "price": 78.90,
       "images": [
         "assets/calça1.png",
         "assets/calça12.png",
         "assets/calça13.png",
         "assets/calça14.png",
       ],
+      "id": 3,
     },
     {
       "title": "Basic Solid Bodycon Dress",
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90\$",
+      "price": 78.90,
       "images": [
         "assets/camisa2.png",
         "assets/camisa22.png",
         "assets/camisa23.png",
         "assets/camisa24.png",
       ],
+      "id": 2,
     },
     {
       "title": "Basic Solid Bodycon Dress",
       "description":
           "This style is suitable for youn people when they want to attend semi-formal.",
       "sizes": ["L", "M", "S", "XL"],
-      "price": "78,90\$",
+      "price": 78.90,
       "images": [
         "assets/calça2.png",
         "assets/calça22.png",
         "assets/calça23.png",
         "assets/calça24.png",
       ],
+      "id": 4,
     },
   ];
-
-  List<Map<String, dynamic>> cartItems = [];
 }

@@ -20,11 +20,13 @@ class AppRoutes {
       case ProductScreen.tag:
         ProductScreenArgs args = settings.arguments as ProductScreenArgs;
 
-        return ProductScreen(product: args.product!);
+        return ProductScreen(
+          product: args.product!,
+        );
       case CartScreen.tag:
-        CartScreenArgs arg = settings.arguments as CartScreenArgs;
+        //CartScreenArgs arg = settings.arguments as CartScreenArgs;
 
-        return CartScreen(product: arg.product);
+        return CartScreen();
       default:
         return null;
     }

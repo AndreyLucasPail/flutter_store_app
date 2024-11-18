@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_store_app/cart/cart_screen.dart';
-import 'package:flutter_store_app/mixin/mixin.dart';
+import 'package:flutter_store_app/mixin/products_mixin.dart';
 import 'package:flutter_store_app/product_screen/product_screen.dart';
 import 'package:flutter_store_app/utils/colors.dart';
 
@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with Mixin {
+class _HomeScreenState extends State<HomeScreen> with ProdutsMixin {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -62,9 +62,6 @@ class _HomeScreenState extends State<HomeScreen> with Mixin {
             Navigator.pushNamed(
               context,
               CartScreen.tag,
-              arguments: CartScreenArgs(
-                product: cartItems,
-              ),
             );
           },
           child: const SizedBox(
@@ -248,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> with Mixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                product["price"],
+                "${product["price"]}",
                 style: const TextStyle(
                   fontSize: 18,
                 ),

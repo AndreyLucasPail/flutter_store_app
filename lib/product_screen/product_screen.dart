@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_store_app/cart/cart_screen.dart';
-import 'package:flutter_store_app/mixin/mixin.dart';
+import 'package:flutter_store_app/mixin/products_mixin.dart';
+import 'package:flutter_store_app/model/cart_model.dart';
 import 'package:flutter_store_app/utils/colors.dart';
 
 class ProductScreenArgs {
-  ProductScreenArgs({required this.product});
+  ProductScreenArgs({
+    required this.product,
+  });
 
   final Map<String, dynamic>? product;
 }
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key, required this.product});
+  const ProductScreen({
+    super.key,
+    required this.product,
+  });
 
   static const tag = "/product";
 
@@ -20,7 +26,7 @@ class ProductScreen extends StatefulWidget {
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> with Mixin {
+class _ProductScreenState extends State<ProductScreen> with ProdutsMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -280,7 +286,7 @@ class _ProductScreenState extends State<ProductScreen> with Mixin {
             ),
             const SizedBox(height: 20),
             Text(
-              widget.product["price"],
+              "${widget.product["price"]}",
               style: const TextStyle(
                 fontSize: 20,
               ),
@@ -295,17 +301,19 @@ class _ProductScreenState extends State<ProductScreen> with Mixin {
     List img = widget.product["images"];
     return InkWell(
       onTap: () {
-        cartItems.add({
-          "title": widget.product["title"],
-          "price": widget.product["price"],
-          "img": img.first,
-          "size": activeButton,
-          "quantity": 1,
-        });
+        cart.addCartItem(
+          CartModel(
+            id: widget.product["id"],
+            totalPrice: widget.product["price"],
+            title: widget.product["title"],
+            quantity: 1,
+            size: activeButton,
+            img: img.first,
+          ),
+        );
         Navigator.pushNamed(
           context,
           CartScreen.tag,
-          arguments: CartScreenArgs(product: cartItems),
         );
       },
       child: Container(
