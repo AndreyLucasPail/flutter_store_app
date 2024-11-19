@@ -2,7 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_store_app/mixin/products_mixin.dart';
 import 'package:flutter_store_app/model/cart_model.dart';
+import 'package:flutter_store_app/provider/cart_provider.dart';
 import 'package:flutter_store_app/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class CartScreenArgs {
   CartScreenArgs({this.product});
@@ -34,17 +36,21 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            appBar(),
-            const SizedBox(height: 40),
-            cartProducts(),
-            const SizedBox(height: 40),
-            totalPrice(),
-            const SizedBox(height: 70),
-            payButton(),
-          ],
+        child: Consumer<CartProvider>(
+          builder: (_, provider, __) {
+            return Column(
+              children: [
+                const SizedBox(height: 40),
+                appBar(),
+                const SizedBox(height: 40),
+                cartProducts(provider),
+                const SizedBox(height: 40),
+                totalPrice(),
+                const SizedBox(height: 70),
+                payButton(),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -88,18 +94,35 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
     );
   }
 
-  Widget cartProducts() {
-    return Column(
-      children: List.generate(
-        cart.cartItems.length,
-        (index) {
-          return productsCard(cart.cartItems[index], index);
-        },
-      ),
-    );
+  Widget cartProducts(CartProvider provider) {
+    if (provider.cartItems.isEmpty) {
+      return const Center(
+        child: Text(
+          "Nenhum item no Carrinho",
+          style: TextStyle(
+            color: CustomColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    } else {
+      return Column(
+        children: List.generate(
+          cart.cartItems.length,
+          (index) {
+            return productsCard(
+              provider.cartItems[index],
+              index,
+              provider,
+            );
+          },
+        ),
+      );
+    }
   }
 
-  Widget productsCard(CartModel product, int index) {
+  Widget productsCard(CartModel product, int index, CartProvider provider) {
     return Row(
       children: [
         Container(
@@ -125,7 +148,7 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
             ),
             const SizedBox(height: 5),
             Text(
-              "\$${product.totalPrice}",
+              "\$${product.price}",
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -134,14 +157,17 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
             const SizedBox(height: 10),
             Row(
               children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: CustomColors.grey300,
-                    borderRadius: BorderRadius.circular(8.0),
+                InkWell(
+                  onTap: () => provider.decrementPrice(product),
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: CustomColors.grey300,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: const Icon(Icons.remove),
                   ),
-                  child: const Icon(Icons.remove),
                 ),
                 const SizedBox(width: 10),
                 Text(
@@ -153,14 +179,17 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: CustomColors.grey300,
-                    borderRadius: BorderRadius.circular(8.0),
+                InkWell(
+                  onTap: () => provider.incrementQuanty(product),
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: CustomColors.grey300,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: const Icon(Icons.add),
                   ),
-                  child: const Icon(Icons.add),
                 ),
                 const SizedBox(width: 90),
                 Container(
@@ -195,11 +224,12 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
   Widget totalPrice() {
     return Column(
       children: [
-        textRow("Subtotal:", "${cart.totalPrice}"),
+        textRow("Subtotal:", "\$ ${cart.totalPrice.toStringAsFixed(2)}"),
         const SizedBox(height: 30),
         textRow("Shipping", "\$ 5.00"),
         const Divider(),
-        textRow("Bag Total:", "\$ ${cart.totalPrice + 5.0}"),
+        textRow("Bag Total:",
+            "\$ ${(cart.totalPrice + shipPrice).toStringAsFixed(2)}"),
       ],
     );
   }

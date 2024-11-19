@@ -286,7 +286,7 @@ class _ProductScreenState extends State<ProductScreen> with ProdutsMixin {
             ),
             const SizedBox(height: 20),
             Text(
-              "${widget.product["price"]}",
+              "${widget.product["price"].toStringAsFixed(2)}",
               style: const TextStyle(
                 fontSize: 20,
               ),
@@ -301,20 +301,24 @@ class _ProductScreenState extends State<ProductScreen> with ProdutsMixin {
     List img = widget.product["images"];
     return InkWell(
       onTap: () {
-        cart.addCartItem(
-          CartModel(
-            id: widget.product["id"],
-            totalPrice: widget.product["price"],
-            title: widget.product["title"],
-            quantity: 1,
-            size: activeButton,
-            img: img.first,
-          ),
-        );
-        Navigator.pushNamed(
-          context,
-          CartScreen.tag,
-        );
+        if (activeButton != "") {
+          cart.addCartItem(
+            CartModel(
+              id: widget.product["id"],
+              price: widget.product["price"],
+              title: widget.product["title"],
+              quantity: 1,
+              size: activeButton,
+              img: img.first,
+            ),
+          );
+          Navigator.pushNamed(
+            context,
+            CartScreen.tag,
+          );
+        } else {
+          snackBar();
+        }
       },
       child: Container(
         height: 50,

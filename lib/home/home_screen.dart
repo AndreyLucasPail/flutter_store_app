@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> with ProdutsMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${product["price"]}",
+                "${product["price"].toStringAsFixed(2)}",
                 style: const TextStyle(
                   fontSize: 18,
                 ),

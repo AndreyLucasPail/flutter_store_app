@@ -12,25 +12,27 @@ class CartProvider with ChangeNotifier {
 
   void addCartItem(CartModel item) {
     _cartItems.add(item);
-    _totalPrice = _totalPrice + item.totalPrice!;
+    _totalPrice = _totalPrice + item.price!;
     notifyListeners();
   }
 
   void removeItem(int index) {
-    _totalPrice -= cartItems[index].totalPrice! * cartItems[index].quantity!;
+    _totalPrice -= cartItems[index].price! * cartItems[index].quantity!;
     _cartItems.removeAt(index);
     notifyListeners();
   }
 
   void incrementQuanty(CartModel item) {
-    _counter++;
-    item.quantity = _counter;
-    _totalPrice = item.totalPrice! * _counter;
+    item.quantity = item.quantity! + 1;
+    _totalPrice += item.price!;
+    notifyListeners();
   }
 
   void decrementPrice(CartModel item) {
-    _counter--;
-    item.quantity = _counter;
-    _totalPrice = item.totalPrice! - _totalPrice;
+    if (item.quantity != null && item.quantity! > 1) {
+      item.quantity = item.quantity! - 1;
+      _totalPrice -= item.price!;
+      notifyListeners();
+    }
   }
 }

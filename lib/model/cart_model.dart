@@ -1,14 +1,14 @@
 class CartModel {
   CartModel({
     this.title,
-    this.totalPrice,
+    this.price,
     this.img,
     this.size,
     this.quantity,
     this.id,
   });
 
-  double? totalPrice;
+  double? price;
   String? title;
   String? img;
   String? size;

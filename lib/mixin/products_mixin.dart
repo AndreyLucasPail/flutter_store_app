@@ -8,6 +8,7 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   late double mediaWidth = MediaQuery.of(context).size.width;
   String activeButtonHome = "Clothes";
   String activeButton = "";
+  final double shipPrice = 5.0;
 
   late final cart = Provider.of<CartProvider>(context, listen: false);
 
@@ -163,4 +164,31 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
       "id": 4,
     },
   ];
+
+  snackBar() {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: Container(
+          height: 70,
+          width: mediaWidth,
+          decoration: BoxDecoration(
+            color: CustomColors.limedAsh,
+            border: Border.all(color: CustomColors.white),
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: const Center(
+            child: Text(
+              "Select a size",
+              style: TextStyle(
+                color: CustomColors.white,
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
