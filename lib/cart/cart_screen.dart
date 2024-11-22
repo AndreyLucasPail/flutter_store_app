@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/card/new_card_screen.dart';
 import 'package:flutter_store_app/mixin/products_mixin.dart';
 import 'package:flutter_store_app/model/cart_model.dart';
 import 'package:flutter_store_app/provider/cart_provider.dart';
@@ -262,7 +263,7 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
   Widget payButton() {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, CartScreen.tag);
+        Navigator.pushNamed(context, NewCardScreen.tag);
       },
       child: Container(
         height: 50,

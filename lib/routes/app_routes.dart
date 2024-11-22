@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/card/new_card_screen.dart';
 import 'package:flutter_store_app/cart/cart_screen.dart';
 import 'package:flutter_store_app/home/home_screen.dart';
 import 'package:flutter_store_app/product_screen/product_screen.dart';
@@ -25,8 +26,9 @@ class AppRoutes {
         );
       case CartScreen.tag:
         //CartScreenArgs arg = settings.arguments as CartScreenArgs;
-
-        return CartScreen();
+        return const CartScreen();
+      case NewCardScreen.tag:
+        return const NewCardScreen();
       default:
         return null;
     }
