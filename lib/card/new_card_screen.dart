@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_store_app/mixin/products_mixin.dart";
 import "package:flutter_store_app/utils/colors.dart";
+import "package:flutter_svg/flutter_svg.dart";
 
 class NewCardScreen extends StatefulWidget {
   const NewCardScreen({super.key});
@@ -109,50 +110,62 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
   Widget changePayment() {
     return Column(
       children: [
-        Text(
+        const Text(
           "Other way to pay",
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        selectCard(),
+        selectCard("Master Card", "assets/mastercard-logo.svg"),
+        selectCard("Apple pay", "assets/apple-pay.svg"),
+        selectCard("Cielo payment", "assets/cielo-1.svg"),
       ],
     );
   }
 
-  Widget selectCard() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: CustomColors.snow,
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 8,
-            spreadRadius: 0,
-            color: CustomColors.grey,
-          )
-        ],
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 50,
-            width: 50,
-            color: CustomColors.orange,
-          ),
-          Text("Master Card"),
-          Checkbox(
-            value: isChecked,
-            shape: const CircleBorder(),
-            onChanged: (bool? value) {
-              setState(() {
-                isChecked = value!;
-              });
-            },
-          )
-        ],
+  Widget selectCard(String text, String asset) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        padding: EdgeInsets.all(8.0),
+        height: 70,
+        decoration: BoxDecoration(
+          color: CustomColors.snow,
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 8,
+              spreadRadius: 0,
+              color: CustomColors.grey,
+            )
+          ],
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              child: SvgPicture.asset(asset),
+            ),
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Checkbox(
+              value: isChecked,
+              shape: const CircleBorder(),
+              onChanged: (bool? value) {
+                setState(() {
+                  isChecked = value!;
+                });
+              },
+            )
+          ],
+        ),
       ),
     );
   }
