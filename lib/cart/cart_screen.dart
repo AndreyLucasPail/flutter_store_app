@@ -208,7 +208,7 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
                 ),
                 const SizedBox(width: 10),
                 IconButton(
-                  onPressed: () => cart.removeItem(index),
+                  onPressed: () => removeItemDialog(index),
                   icon: const Icon(
                     Icons.delete,
                     color: CustomColors.red,
@@ -291,6 +291,49 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
           ),
         ),
       ),
+    );
+  }
+
+  Future removeItemDialog(int index) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: const Text(
+            "Do you want to remove the item from the cart?",
+            style: TextStyle(
+              color: CustomColors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                "Cancel",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: CustomColors.blue,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                cart.removeItem(index);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "Remove",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: CustomColors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

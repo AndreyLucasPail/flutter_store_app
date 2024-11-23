@@ -116,7 +116,44 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
             fontWeight: FontWeight.bold,
           ),
         ),
+        selectCard(),
       ],
+    );
+  }
+
+  Widget selectCard() {
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: CustomColors.snow,
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 8,
+            spreadRadius: 0,
+            color: CustomColors.grey,
+          )
+        ],
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            color: CustomColors.orange,
+          ),
+          Text("Master Card"),
+          Checkbox(
+            value: isChecked,
+            shape: const CircleBorder(),
+            onChanged: (bool? value) {
+              setState(() {
+                isChecked = value!;
+              });
+            },
+          )
+        ],
+      ),
     );
   }
 }
