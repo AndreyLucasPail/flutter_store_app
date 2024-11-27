@@ -174,14 +174,34 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
   Future newCardbottomsheet() {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: CustomColors.sage,
+      backgroundColor: CustomColors.limedAsh,
       builder: (context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            cardNumberInput(),
-            cardDateInput(),
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Add New Card",
+                style: TextStyle(
+                  color: CustomColors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              cardNumberInput(),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  cardDateInput(),
+                  const SizedBox(width: 15),
+                  cardCVVInput(),
+                ],
+              ),
+              const SizedBox(height: 15),
+              cardNameInput(),
+            ],
+          ),
         );
       },
     );
@@ -189,16 +209,108 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
 
   Widget cardNumberInput() {
     return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.black,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.black,
+            width: 2,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.black,
+            width: 2,
+          ),
+        ),
+        fillColor: CustomColors.sage,
+        filled: true,
       ),
     );
   }
 
   Widget cardDateInput() {
+    return Flexible(
+      child: TextFormField(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          fillColor: CustomColors.sage,
+          filled: true,
+        ),
+      ),
+    );
+  }
+
+  Widget cardCVVInput() {
+    return Flexible(
+      child: TextFormField(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          fillColor: CustomColors.sage,
+          filled: true,
+        ),
+      ),
+    );
+  }
+
+  Widget cardNameInput() {
     return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.black,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.black,
+            width: 2,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: CustomColors.black,
+            width: 2,
+          ),
+        ),
+        fillColor: CustomColors.sage,
+        filled: true,
       ),
     );
   }
