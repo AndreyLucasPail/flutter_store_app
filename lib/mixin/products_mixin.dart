@@ -10,6 +10,7 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   String activeButton = "";
   final double shipPrice = 5.0;
   bool isChecked = false;
+  String check = "";
 
   late final cart = Provider.of<CartProvider>(context, listen: false);
 

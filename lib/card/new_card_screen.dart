@@ -90,7 +90,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () => newCardbottomsheet(),
           child: Container(
             height: 250,
             width: mediaWidth * 0.2,
@@ -128,7 +128,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         height: 70,
         decoration: BoxDecoration(
           color: CustomColors.snow,
@@ -160,12 +160,45 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
               shape: const CircleBorder(),
               onChanged: (bool? value) {
                 setState(() {
-                  isChecked = value!;
+                  check = text;
+                  text == check ? isChecked = value! : false;
                 });
               },
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Future newCardbottomsheet() {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: CustomColors.sage,
+      builder: (context) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            cardNumberInput(),
+            cardDateInput(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget cardNumberInput() {
+    return TextFormField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  Widget cardDateInput() {
+    return TextFormField(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
       ),
     );
   }
