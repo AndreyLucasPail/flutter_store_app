@@ -33,6 +33,8 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
             addCard(),
             const SizedBox(height: 40),
             changePayment(),
+            const SizedBox(height: 40),
+            checkoutButton(),
           ],
         ),
       ),
@@ -85,7 +87,15 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
           height: 250,
           width: mediaWidth * 0.7,
           decoration: BoxDecoration(
-            color: CustomColors.green,
+            gradient: const LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                CustomColors.limedAsh,
+                CustomColors.greyGreen,
+                CustomColors.sage,
+              ],
+            ),
             borderRadius: BorderRadius.circular(16.0),
           ),
         ),
@@ -142,8 +152,9 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
               height: 50,
               width: 50,
               child: SvgPicture.asset(asset),
@@ -174,7 +185,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
   Future newCardbottomsheet() {
     return showModalBottomSheet(
       context: context,
-      backgroundColor: CustomColors.limedAsh,
+      backgroundColor: CustomColors.greyGreen,
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -189,17 +200,22 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              cardNumberInput(),
+              const SizedBox(height: 30),
+              cardInput(),
               const SizedBox(height: 15),
               Row(
                 children: [
-                  cardDateInput(),
+                  cardInput(),
                   const SizedBox(width: 15),
-                  cardCVVInput(),
+                  cardInput(),
                 ],
               ),
               const SizedBox(height: 15),
-              cardNameInput(),
+              cardInput(),
+              const SizedBox(height: 15),
+              cardInput(),
+              const SizedBox(height: 25),
+              newCardButton(),
             ],
           ),
         );
@@ -207,33 +223,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     );
   }
 
-  Widget cardNumberInput() {
-    return TextFormField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: CustomColors.black,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: CustomColors.black,
-            width: 2,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: CustomColors.black,
-            width: 2,
-          ),
-        ),
-        fillColor: CustomColors.sage,
-        filled: true,
-      ),
-    );
-  }
-
-  Widget cardDateInput() {
+  Widget cardInput() {
     return Flexible(
       child: TextFormField(
         decoration: const InputDecoration(
@@ -261,57 +251,56 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     );
   }
 
-  Widget cardCVVInput() {
-    return Flexible(
-      child: TextFormField(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: CustomColors.black,
-            ),
+  Widget newCardButton() {
+    return SizedBox(
+      height: 55,
+      width: mediaWidth * 0.8,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CustomColors.limedAsh,
+        ),
+        child: const Text(
+          "Add New Card",
+          style: TextStyle(
+            color: CustomColors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: CustomColors.black,
-              width: 2,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: CustomColors.black,
-              width: 2,
-            ),
-          ),
-          fillColor: CustomColors.sage,
-          filled: true,
         ),
       ),
     );
   }
 
-  Widget cardNameInput() {
-    return TextFormField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: CustomColors.black,
+  Widget checkoutButton() {
+    return SizedBox(
+      height: 55,
+      width: mediaWidth * 0.8,
+      child: ElevatedButton(
+        onPressed: () => checkoutBottomSheet(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: CustomColors.limedAsh,
+        ),
+        child: const Text(
+          "Checkout",
+          style: TextStyle(
+            color: CustomColors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: CustomColors.black,
-            width: 2,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: CustomColors.black,
-            width: 2,
-          ),
-        ),
-        fillColor: CustomColors.sage,
-        filled: true,
       ),
+    );
+  }
+
+  Future checkoutBottomSheet() {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: [Container()],
+        );
+      },
     );
   }
 }
