@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store_app/provider/card_provider.dart';
 import 'package:flutter_store_app/provider/cart_provider.dart';
 import 'package:flutter_store_app/routes/app_routes.dart';
 import 'package:flutter_store_app/splash/splash_screen.dart';
@@ -9,6 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => CardProvider())
       ],
       child: const MyApp(),
     ),

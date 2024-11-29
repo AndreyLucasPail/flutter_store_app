@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_store_app/mixin/products_mixin.dart";
+import "package:flutter_store_app/provider/card_provider.dart";
 import "package:flutter_store_app/utils/colors.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:provider/provider.dart";
 
 class NewCardScreen extends StatefulWidget {
   const NewCardScreen({super.key});
@@ -25,17 +27,21 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            appBar(),
-            const SizedBox(height: 40),
-            addCard(),
-            const SizedBox(height: 40),
-            changePayment(),
-            const SizedBox(height: 40),
-            checkoutButton(),
-          ],
+        child: Consumer<CardProvider>(
+          builder: (_, cardProvider, __) {
+            return Column(
+              children: [
+                const SizedBox(height: 40),
+                appBar(),
+                const SizedBox(height: 40),
+                addCard(cardProvider),
+                const SizedBox(height: 40),
+                changePayment(),
+                const SizedBox(height: 40),
+                checkoutButton(),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -79,7 +85,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     );
   }
 
-  Widget addCard() {
+  Widget addCard(CardProvider provider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -100,7 +106,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
           ),
         ),
         InkWell(
-          onTap: () => newCardbottomsheet(),
+          onTap: () => newCardbottomsheet(provider),
           child: Container(
             height: 250,
             width: mediaWidth * 0.2,
@@ -182,63 +188,79 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     );
   }
 
-  Future newCardbottomsheet() {
+  Future newCardbottomsheet(CardProvider provider) {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: CustomColors.greyGreen,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Add New Card",
-                style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+        return SizedBox(
+          height: mediaHeight * 0.6,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Add New Card",
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              cardInput(),
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  cardInput(),
-                  const SizedBox(width: 15),
-                  cardInput(),
-                ],
-              ),
-              const SizedBox(height: 15),
-              cardInput(),
-              const SizedBox(height: 15),
-              cardInput(),
-              const SizedBox(height: 25),
-              newCardButton(),
-            ],
+                const SizedBox(height: 30),
+                cardInput("Name", "Name", nameController),
+                const SizedBox(height: 15),
+                Row(
+                  children: [
+                    cardInput("CVV", "CVV", cvvController),
+                    const SizedBox(width: 15),
+                    cardInput("Date", "Date", dateController),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                cardInput("Card Number", "Card Number", numberController),
+                const SizedBox(height: 15),
+                cardInput("CPF", "CPF", cpfController),
+                const SizedBox(height: 25),
+                newCardButton(provider),
+              ],
+            ),
           ),
         );
       },
     );
   }
 
-  Widget cardInput() {
+  Widget cardInput(
+    String hintText,
+    String labelText,
+    TextEditingController controller,
+  ) {
     return Flexible(
       child: TextFormField(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            color: CustomColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          border: const OutlineInputBorder(
             borderSide: BorderSide(
               color: CustomColors.black,
             ),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: CustomColors.black,
               width: 2,
             ),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: CustomColors.black,
               width: 2,
@@ -251,12 +273,22 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     );
   }
 
-  Widget newCardButton() {
+  Widget newCardButton(CardProvider provider) {
     return SizedBox(
       height: 55,
       width: mediaWidth * 0.8,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          provider.newCard(
+            {
+              "name": nameController.text,
+              "number": numberController.text,
+              "cvv": cvvController.text,
+              "date": dateController.text,
+              "cpf": cpfController.text,
+            },
+          );
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColors.limedAsh,
         ),
@@ -295,6 +327,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
 
   Future checkoutBottomSheet() {
     return showModalBottomSheet(
+      backgroundColor: CustomColors.greyGreen,
       context: context,
       builder: (context) {
         return Column(

@@ -12,6 +12,12 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   bool isChecked = false;
   String check = "";
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController cvvController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController cpfController = TextEditingController();
+
   late final cart = Provider.of<CartProvider>(context, listen: false);
 
   List<Color> colorChange(String text) {
