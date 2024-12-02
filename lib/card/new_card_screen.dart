@@ -90,6 +90,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
+          padding: const EdgeInsets.all(8.0),
           height: 250,
           width: mediaWidth * 0.7,
           decoration: BoxDecoration(
@@ -103,6 +104,36 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
               ],
             ),
             borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: SvgPicture.asset("assets/mastercard-logo.svg"),
+                ),
+              ),
+              Text(
+                provider.card.isNotEmpty
+                    ? provider.currentCard["name"]
+                    : "xxxxxxxxxxx",
+                style: const TextStyle(
+                  color: CustomColors.white,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                provider.card.isNotEmpty
+                    ? provider.currentCard["number"]
+                    : "xxxxxxxxxxx",
+                style: const TextStyle(
+                  color: CustomColors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ],
           ),
         ),
         InkWell(
@@ -288,6 +319,12 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
               "cpf": cpfController.text,
             },
           );
+          nameController.clear();
+          numberController.clear();
+          cvvController.clear();
+          dateController.clear();
+          cpfController.clear();
+          Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColors.limedAsh,
