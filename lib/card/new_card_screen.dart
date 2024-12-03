@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_store_app/mixin/products_mixin.dart";
 import "package:flutter_store_app/provider/card_provider.dart";
 import "package:flutter_store_app/utils/colors.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:mask_text_input_formatter/mask_text_input_formatter.dart";
 import "package:provider/provider.dart";
 
 class NewCardScreen extends StatefulWidget {
@@ -90,7 +92,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           height: 250,
           width: mediaWidth * 0.7,
           decoration: BoxDecoration(
@@ -115,23 +117,43 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
                   child: SvgPicture.asset("assets/mastercard-logo.svg"),
                 ),
               ),
-              Text(
-                provider.card.isNotEmpty
-                    ? provider.currentCard["name"]
-                    : "xxxxxxxxxxx",
-                style: const TextStyle(
-                  color: CustomColors.white,
-                  fontSize: 20,
+              const Spacer(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  provider.card.isNotEmpty
+                      ? provider.currentCard["number"]
+                      : "xxxxxxxxxxx",
+                  style: const TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Text(
-                provider.card.isNotEmpty
-                    ? provider.currentCard["number"]
-                    : "xxxxxxxxxxx",
-                style: const TextStyle(
-                  color: CustomColors.white,
-                  fontSize: 18,
-                ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    provider.card.isNotEmpty
+                        ? provider.currentCard["name"]
+                        : "xxxxxxxxxxx",
+                    style: const TextStyle(
+                      color: CustomColors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    provider.card.isNotEmpty
+                        ? provider.currentCard["date"]
+                        : "xxxx",
+                    style: const TextStyle(
+                      color: CustomColors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -247,13 +269,13 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
                   children: [
                     cardInput("CVV", "CVV", cvvController),
                     const SizedBox(width: 15),
-                    cardInput("Date", "Date", dateController),
+                    cardDateInput("Date", "Date", dateController),
                   ],
                 ),
                 const SizedBox(height: 15),
-                cardInput("Card Number", "Card Number", numberController),
+                cardNumberInput("Card Number", "Card Number", numberController),
                 const SizedBox(height: 15),
-                cardInput("CPF", "CPF", cpfController),
+                cardCpfInput("CPF", "CPF", cpfController),
                 const SizedBox(height: 25),
                 newCardButton(provider),
               ],
@@ -300,6 +322,144 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
           fillColor: CustomColors.sage,
           filled: true,
         ),
+      ),
+    );
+  }
+
+  Widget cardNumberInput(
+    String hintText,
+    String labelText,
+    TextEditingController controller,
+  ) {
+    return Flexible(
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            color: CustomColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+            ),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          fillColor: CustomColors.sage,
+          filled: true,
+        ),
+        inputFormatters: [
+          MaskTextInputFormatter(
+            mask: 'xxxx-xxxx-xxxx-xxxx',
+            filter: {'x': RegExp(r'[0-9]')},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardCpfInput(
+    String hintText,
+    String labelText,
+    TextEditingController controller,
+  ) {
+    return Flexible(
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            color: CustomColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+            ),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          fillColor: CustomColors.sage,
+          filled: true,
+        ),
+        inputFormatters: [
+          MaskTextInputFormatter(
+            mask: 'xxx-xxx-xxx-xx',
+            filter: {'x': RegExp(r'[0-9]')},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardDateInput(
+    String hintText,
+    String labelText,
+    TextEditingController controller,
+  ) {
+    return Flexible(
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            color: CustomColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+            ),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          fillColor: CustomColors.sage,
+          filled: true,
+        ),
+        inputFormatters: [
+          MaskTextInputFormatter(
+            mask: 'xx/xx/xxxx',
+            filter: {'x': RegExp(r'[0-9]')},
+          ),
+        ],
       ),
     );
   }
