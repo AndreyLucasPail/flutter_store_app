@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_store_app/mixin/products_mixin.dart";
 import "package:flutter_store_app/provider/card_provider.dart";
+import "package:flutter_store_app/provider/cart_provider.dart";
 import "package:flutter_store_app/utils/colors.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:mask_text_input_formatter/mask_text_input_formatter.dart";
@@ -29,8 +30,8 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Consumer<CardProvider>(
-          builder: (_, cardProvider, __) {
+        child: Consumer2<CardProvider, CartProvider>(
+          builder: (_, cardProvider, cartProvider, __) {
             return Column(
               children: [
                 const SizedBox(height: 40),
@@ -166,7 +167,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
               border: Border.all(
-                color: CustomColors.green,
+                color: CustomColors.limedAsh,
               ),
             ),
             child: const Icon(Icons.add),
@@ -245,7 +246,7 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: CustomColors.greyGreen,
+      backgroundColor: CustomColors.snow,
       builder: (context) {
         return SizedBox(
           height: mediaHeight * 0.6,
@@ -524,13 +525,212 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
 
   Future checkoutBottomSheet() {
     return showModalBottomSheet(
-      backgroundColor: CustomColors.greyGreen,
+      backgroundColor: CustomColors.snow,
       context: context,
       builder: (context) {
-        return Column(
-          children: [Container()],
+        return SizedBox(
+          height: mediaHeight * 0.7,
+          width: mediaWidth,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const Text(
+                  "Payment",
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                paymentMethod(),
+                const SizedBox(height: 30),
+                address(),
+              ],
+            ),
+          ),
         );
       },
+    );
+  }
+
+  Widget paymentMethod() {
+    return ExpansionTile(
+      leading: SizedBox(
+        height: 50,
+        width: 50,
+        child: SvgPicture.asset("assets/mastercard-logo.svg"),
+      ),
+      title: const Column(
+        children: [
+          Text("****1234"),
+          Text("Payment method"),
+        ],
+      ),
+      children: [
+        Text("1x         of           \$50.00"),
+        Text("2x         of           \$50.00"),
+        Text("3x         of           \$50.00"),
+        Text("4x         of           \$50.00"),
+        Text("5x         of           \$50.00"),
+        Text("6x         of           \$50.00"),
+        Text("7x         of           \$50.00"),
+        Text("8x         of           \$50.00"),
+        Text("9x         of           \$50.00"),
+        Text("10x        of          \$50.00"),
+        Text("11x        of          \$50.00"),
+        Text("12x        of          \$50.00"),
+      ],
+    );
+  }
+
+  Widget address() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          height: 50,
+          width: 50,
+          decoration: const BoxDecoration(
+            color: CustomColors.grey300,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            size: 30,
+            Icons.house,
+            color: CustomColors.black,
+          ),
+        ),
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Delivery Address",
+              style: TextStyle(
+                color: CustomColors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "Street sout america / Brazil, 123",
+              style: TextStyle(
+                color: CustomColors.black,
+              ),
+            ),
+          ],
+        ),
+        InkWell(
+          onTap: () => addressDialog(),
+          child: Container(
+            height: 50,
+            width: 50,
+            decoration: const BoxDecoration(
+              color: CustomColors.grey300,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              size: 30,
+              Icons.create_rounded,
+              color: CustomColors.black,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future addressDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: SizedBox(
+            height: mediaHeight * 0.55,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "Add address",
+                    style: TextStyle(
+                      color: CustomColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  addressInput(streetController, "Street", "Street"),
+                  const SizedBox(height: 20),
+                  addressInput(houseNumController, "Number", "Number"),
+                  const SizedBox(height: 20),
+                  addressInput(cityController, "City", "City"),
+                  const SizedBox(height: 20),
+                  addressInput(countryController, "Country", "Country"),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: mediaWidth * 0.6,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.sage,
+                      ),
+                      child: const Text(
+                        "Add Address",
+                        style: TextStyle(
+                          color: CustomColors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget addressInput(
+    TextEditingController controller,
+    String hintText,
+    String labelText,
+  ) {
+    return Flexible(
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            color: CustomColors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+            ),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: CustomColors.black,
+              width: 2,
+            ),
+          ),
+          fillColor: CustomColors.sage,
+          filled: true,
+        ),
+      ),
     );
   }
 }

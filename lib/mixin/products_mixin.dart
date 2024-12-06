@@ -18,6 +18,11 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController cpfController = TextEditingController();
 
+  final TextEditingController streetController = TextEditingController();
+  final TextEditingController houseNumController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+
   late final cart = Provider.of<CartProvider>(context, listen: false);
 
   List<Color> colorChange(String text) {
