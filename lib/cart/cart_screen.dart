@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_store_app/card/new_card_screen.dart';
+import 'package:flutter_store_app/card/payment_screen.dart';
 import 'package:flutter_store_app/mixin/products_mixin.dart';
 import 'package:flutter_store_app/model/cart_model.dart';
 import 'package:flutter_store_app/provider/cart_provider.dart';
@@ -48,7 +48,7 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
                 const SizedBox(height: 40),
                 totalPrice(),
                 const SizedBox(height: 70),
-                payButton(),
+                payButton(provider),
               ],
             );
           },
@@ -225,12 +225,17 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
   Widget totalPrice() {
     return Column(
       children: [
-        textRow("Subtotal:", "\$ ${cart.totalPrice.toStringAsFixed(2)}"),
+        textRow(
+          "Subtotal:",
+          "\$ ${cart.totalPrice.toStringAsFixed(2)}",
+        ),
         const SizedBox(height: 30),
         textRow("Shipping", "\$ 5.00"),
         const Divider(),
-        textRow("Bag Total:",
-            "\$ ${(cart.totalPrice + shipPrice).toStringAsFixed(2)}"),
+        textRow(
+          "Bag Total:",
+          "\$ ${(cart.totalPrice + shipPrice).toStringAsFixed(2)}",
+        ),
       ],
     );
   }
@@ -260,10 +265,16 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
     );
   }
 
-  Widget payButton() {
+  Widget payButton(CartProvider provider) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, NewCardScreen.tag);
+        Navigator.pushNamed(
+          context,
+          PaymentScreen.tag,
+          arguments: PaymentScreenArgs(
+            provider.totalPrice + shipPrice,
+          ),
+        );
       },
       child: Container(
         height: 50,

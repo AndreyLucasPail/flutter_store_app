@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
 import "package:flutter_store_app/mixin/products_mixin.dart";
 import "package:flutter_store_app/provider/card_provider.dart";
 import "package:flutter_store_app/provider/cart_provider.dart";
@@ -8,16 +7,24 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:mask_text_input_formatter/mask_text_input_formatter.dart";
 import "package:provider/provider.dart";
 
-class NewCardScreen extends StatefulWidget {
-  const NewCardScreen({super.key});
+class PaymentScreenArgs {
+  PaymentScreenArgs(this.totalPrice);
+
+  double totalPrice;
+}
+
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({super.key, this.totalPrice});
 
   static const tag = "/newCard";
 
+  final double? totalPrice;
+
   @override
-  State<NewCardScreen> createState() => _NewCardScreenState();
+  State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
+class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -569,18 +576,30 @@ class _NewCardScreenState extends State<NewCardScreen> with ProdutsMixin {
         ],
       ),
       children: [
-        Text("1x         of           \$50.00"),
-        Text("2x         of           \$50.00"),
-        Text("3x         of           \$50.00"),
-        Text("4x         of           \$50.00"),
-        Text("5x         of           \$50.00"),
-        Text("6x         of           \$50.00"),
-        Text("7x         of           \$50.00"),
-        Text("8x         of           \$50.00"),
-        Text("9x         of           \$50.00"),
-        Text("10x        of          \$50.00"),
-        Text("11x        of          \$50.00"),
-        Text("12x        of          \$50.00"),
+        Text(
+            "1x         of           \$${widget.totalPrice!.toStringAsFixed(2)}"),
+        Text(
+            "2x         of           \$${(widget.totalPrice! / 2).toStringAsFixed(2)}"),
+        Text(
+            "3x         of           \$${(widget.totalPrice! / 3).toStringAsFixed(2)}"),
+        Text(
+            "4x         of           \$${(widget.totalPrice! / 4).toStringAsFixed(2)}"),
+        Text(
+            "5x         of           \$${(widget.totalPrice! / 5).toStringAsFixed(2)}"),
+        Text(
+            "6x         of           \$${(widget.totalPrice! / 6).toStringAsFixed(2)}"),
+        Text(
+            "7x         of           \$${(widget.totalPrice! / 7).toStringAsFixed(2)}"),
+        Text(
+            "8x         of           \$${(widget.totalPrice! / 8).toStringAsFixed(2)}"),
+        Text(
+            "9x         of           \$${(widget.totalPrice! / 9).toStringAsFixed(2)}"),
+        Text(
+            "10x        of          \$${(widget.totalPrice! / 10).toStringAsFixed(2)}"),
+        Text(
+            "11x        of          \$${(widget.totalPrice! / 11).toStringAsFixed(2)}"),
+        Text(
+            "12x        of          \$${(widget.totalPrice! / 12).toStringAsFixed(2)}"),
       ],
     );
   }
