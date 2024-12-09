@@ -532,43 +532,56 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
 
   Future checkoutBottomSheet() {
     return showModalBottomSheet(
+      isScrollControlled: true,
       backgroundColor: CustomColors.snow,
       context: context,
       builder: (context) {
-        return SizedBox(
-          height: mediaHeight * 0.7,
-          width: mediaWidth,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const Text(
-                  "Payment",
-                  style: TextStyle(
-                    color: CustomColors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        return DraggableScrollableSheet(
+            snap: true,
+            expand: false,
+            initialChildSize: 0.7,
+            builder: (context, controller) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Payment",
+                        style: TextStyle(
+                          color: CustomColors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      paymentMethod(),
+                      const SizedBox(height: 30),
+                      address(),
+                      const SizedBox(height: 250),
+                      totalBag(),
+                      const SizedBox(height: 20),
+                      payButton(),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 40),
-                paymentMethod(),
-                const SizedBox(height: 30),
-                address(),
-              ],
-            ),
-          ),
-        );
+              );
+            });
       },
     );
   }
 
   Widget paymentMethod() {
     return ExpansionTile(
+      shape: Border.all(
+        color: CustomColors.black,
+      ),
       leading: SizedBox(
         height: 50,
         width: 50,
         child: SvgPicture.asset("assets/mastercard-logo.svg"),
       ),
+      childrenPadding: const EdgeInsets.all(16.0),
       title: const Column(
         children: [
           Text("****1234"),
@@ -576,31 +589,60 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
         ],
       ),
       children: [
-        Text(
-            "1x         of           \$${widget.totalPrice!.toStringAsFixed(2)}"),
-        Text(
-            "2x         of           \$${(widget.totalPrice! / 2).toStringAsFixed(2)}"),
-        Text(
-            "3x         of           \$${(widget.totalPrice! / 3).toStringAsFixed(2)}"),
-        Text(
-            "4x         of           \$${(widget.totalPrice! / 4).toStringAsFixed(2)}"),
-        Text(
-            "5x         of           \$${(widget.totalPrice! / 5).toStringAsFixed(2)}"),
-        Text(
-            "6x         of           \$${(widget.totalPrice! / 6).toStringAsFixed(2)}"),
-        Text(
-            "7x         of           \$${(widget.totalPrice! / 7).toStringAsFixed(2)}"),
-        Text(
-            "8x         of           \$${(widget.totalPrice! / 8).toStringAsFixed(2)}"),
-        Text(
-            "9x         of           \$${(widget.totalPrice! / 9).toStringAsFixed(2)}"),
-        Text(
-            "10x        of          \$${(widget.totalPrice! / 10).toStringAsFixed(2)}"),
-        Text(
-            "11x        of          \$${(widget.totalPrice! / 11).toStringAsFixed(2)}"),
-        Text(
-            "12x        of          \$${(widget.totalPrice! / 12).toStringAsFixed(2)}"),
+        installment(1),
+        installment(2),
+        installment(3),
+        installment(4),
+        installment(5),
+        installment(6),
+        installment(7),
+        installment(8),
+        installment(9),
+        installment(10),
+        installment(11),
+        installment(12),
       ],
+    );
+  }
+
+  Widget installment(int number) {
+    return InkWell(
+      onTap: () {},
+      child: Row(
+        children: [
+          Text(
+            "${number}X",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 10),
+          const Text(
+            "Of",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            "\$${(widget.totalPrice! / number).toStringAsFixed(2)}",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            "\$${widget.totalPrice!.toStringAsFixed(2)}",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -750,6 +792,53 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
           filled: true,
         ),
       ),
+    );
+  }
+
+  Widget totalBag() {
+    return Row(
+      children: [
+        const Text(
+          "Total:",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          "\$${widget.totalPrice!.toStringAsFixed(2)}",
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget payButton() {
+    return Row(
+      children: [
+        const Spacer(),
+        SizedBox(
+          height: 45,
+          width: mediaWidth * 0.35,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.limedAsh,
+            ),
+            onPressed: () {},
+            child: const Text(
+              "Buy now",
+              style: TextStyle(
+                fontSize: 16,
+                color: CustomColors.white,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
