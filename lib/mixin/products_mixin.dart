@@ -13,6 +13,8 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   String check = "";
   int selecInstallments = 1;
 
+  final cardKey = GlobalKey<FormState>();
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
   final TextEditingController cvvController = TextEditingController();
@@ -179,7 +181,7 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
     },
   ];
 
-  snackBar() {
+  snackBar(String text) {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.transparent,
@@ -192,10 +194,10 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
             border: Border.all(color: CustomColors.white),
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
-              "Select a size",
-              style: TextStyle(
+              text,
+              style: const TextStyle(
                 color: CustomColors.white,
                 fontSize: 18,
               ),
@@ -204,5 +206,45 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
         ),
       ),
     );
+  }
+
+  String? cardNameValidator(String? text) {
+    if (text!.isEmpty) {
+      return "Invalid name";
+    } else {
+      return null;
+    }
+  }
+
+  String? cardNumValidator(String? text) {
+    if (text!.isEmpty || text.length != 19) {
+      return "Invalid card Number";
+    } else {
+      return null;
+    }
+  }
+
+  String? cardCVValidator(String? text) {
+    if (text!.isEmpty || text.length != 3) {
+      return "Invalid CVV Number";
+    } else {
+      return null;
+    }
+  }
+
+  String? cardDateValidator(String? text) {
+    if (text!.isEmpty || text.length != 5) {
+      return "Invalid date";
+    } else {
+      return null;
+    }
+  }
+
+  String? cardCPFValidator(String? text) {
+    if (text!.isEmpty || text.length != 14) {
+      return "Ivalid CPF";
+    } else {
+      return null;
+    }
   }
 }

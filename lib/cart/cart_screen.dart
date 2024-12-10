@@ -61,26 +61,11 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
     return Row(
       children: [
         const SizedBox(width: 10),
-        InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: const BoxDecoration(
-              color: CustomColors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 8,
-                  spreadRadius: 0,
-                  color: CustomColors.grey,
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              size: 25,
-            ),
+        IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 25,
           ),
         ),
         const SizedBox(width: 100),

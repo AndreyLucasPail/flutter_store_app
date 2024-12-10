@@ -48,7 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
                 const SizedBox(height: 40),
                 changePayment(),
                 const SizedBox(height: 40),
-                checkoutButton(),
+                checkoutButton(cardProvider),
               ],
             );
           },
@@ -61,26 +61,11 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     return Row(
       children: [
         const SizedBox(width: 10),
-        InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            height: 45,
-            width: 45,
-            decoration: const BoxDecoration(
-              color: CustomColors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 8,
-                  spreadRadius: 0,
-                  color: CustomColors.grey,
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              size: 25,
-            ),
+        IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 25,
           ),
         ),
         const SizedBox(width: 100),
@@ -255,38 +240,42 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
       isScrollControlled: true,
       backgroundColor: CustomColors.snow,
       builder: (context) {
-        return SizedBox(
-          height: mediaHeight * 0.6,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Add New Card",
-                  style: TextStyle(
-                    color: CustomColors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        return Form(
+          key: cardKey,
+          child: SizedBox(
+            height: mediaHeight * 0.6,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Add New Card",
+                    style: TextStyle(
+                      color: CustomColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                cardInput("Name", "Name", nameController),
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    cardInput("CVV", "CVV", cvvController),
-                    const SizedBox(width: 15),
-                    cardDateInput("Date", "Date", dateController),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                cardNumberInput("Card Number", "Card Number", numberController),
-                const SizedBox(height: 15),
-                cardCpfInput("CPF", "CPF", cpfController),
-                const SizedBox(height: 25),
-                newCardButton(provider),
-              ],
+                  const SizedBox(height: 30),
+                  cardInput("Name", "Name", nameController, cardNameValidator),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      cardInput("CVV", "CVV", cvvController, cardCVValidator),
+                      const SizedBox(width: 15),
+                      cardDateInput("Date", "Date", dateController),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  cardNumberInput(
+                      "Card Number", "Card Number", numberController),
+                  const SizedBox(height: 15),
+                  cardCpfInput("CPF", "CPF", cpfController),
+                  const SizedBox(height: 25),
+                  newCardButton(provider),
+                ],
+              ),
             ),
           ),
         );
@@ -298,10 +287,12 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     String hintText,
     String labelText,
     TextEditingController controller,
+    String? Function(String?)? validator,
   ) {
     return Flexible(
       child: TextFormField(
         controller: controller,
+        validator: validator,
         decoration: InputDecoration(
           hintText: hintText,
           labelText: labelText,
@@ -342,6 +333,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     return Flexible(
       child: TextFormField(
         controller: controller,
+        validator: cardNumValidator,
         decoration: InputDecoration(
           hintText: hintText,
           labelText: labelText,
@@ -388,6 +380,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     return Flexible(
       child: TextFormField(
         controller: controller,
+        validator: cardCPFValidator,
         decoration: InputDecoration(
           hintText: hintText,
           labelText: labelText,
@@ -434,6 +427,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     return Flexible(
       child: TextFormField(
         controller: controller,
+        validator: cardDateValidator,
         decoration: InputDecoration(
           hintText: hintText,
           labelText: labelText,
@@ -478,21 +472,23 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
       width: mediaWidth * 0.8,
       child: ElevatedButton(
         onPressed: () {
-          provider.newCard(
-            {
-              "name": nameController.text,
-              "number": numberController.text,
-              "cvv": cvvController.text,
-              "date": dateController.text,
-              "cpf": cpfController.text,
-            },
-          );
-          nameController.clear();
-          numberController.clear();
-          cvvController.clear();
-          dateController.clear();
-          cpfController.clear();
-          Navigator.pop(context);
+          if (cardKey.currentState!.validate()) {
+            provider.newCard(
+              {
+                "name": nameController.text,
+                "number": numberController.text,
+                "cvv": cvvController.text,
+                "date": dateController.text,
+                "cpf": cpfController.text,
+              },
+            );
+            nameController.clear();
+            numberController.clear();
+            cvvController.clear();
+            dateController.clear();
+            cpfController.clear();
+            Navigator.pop(context);
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColors.limedAsh,
@@ -509,12 +505,14 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Widget checkoutButton() {
+  Widget checkoutButton(CardProvider cardProvider) {
     return SizedBox(
       height: 55,
       width: mediaWidth * 0.8,
       child: ElevatedButton(
-        onPressed: () => checkoutBottomSheet(),
+        onPressed: () => cardProvider.card.isNotEmpty
+            ? checkoutBottomSheet(cardProvider)
+            : snackBar("Add a Card"),
         style: ElevatedButton.styleFrom(
           backgroundColor: CustomColors.limedAsh,
         ),
@@ -530,7 +528,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Future checkoutBottomSheet() {
+  Future checkoutBottomSheet(CardProvider cardProvider) {
     return showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: CustomColors.snow,
@@ -557,7 +555,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
                           ),
                         ),
                         const SizedBox(height: 40),
-                        paymentMethod(state),
+                        paymentMethod(state, cardProvider.currentCard),
                         const SizedBox(height: 30),
                         address(),
                         const SizedBox(height: 250),
@@ -576,7 +574,10 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Widget paymentMethod(Function state) {
+  Widget paymentMethod(Function state, Map<String, dynamic> currentCard) {
+    String cardNumber = currentCard["number"];
+    print(cardNumber.length);
+    String fourDigits = cardNumber.substring(cardNumber.length - 4);
     return ExpansionTile(
       shape: Border.all(
         color: CustomColors.black,
@@ -587,10 +588,10 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
         child: SvgPicture.asset("assets/mastercard-logo.svg"),
       ),
       childrenPadding: const EdgeInsets.all(16.0),
-      title: const Column(
+      title: Column(
         children: [
-          Text("****1234"),
-          Text("Payment method"),
+          Text("****$fourDigits"),
+          const Text("Payment method"),
         ],
       ),
       children: List.generate(

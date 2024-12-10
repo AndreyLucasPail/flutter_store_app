@@ -317,7 +317,7 @@ class _ProductScreenState extends State<ProductScreen> with ProdutsMixin {
             CartScreen.tag,
           );
         } else {
-          snackBar();
+          snackBar("Select a size");
         }
       },
       child: Container(
