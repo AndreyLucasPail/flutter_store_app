@@ -123,7 +123,11 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
     }
   }
 
-  Widget productsCard(CartModel product, int index, CartProvider provider) {
+  Widget productsCard(
+    CartModel product,
+    int index,
+    CartProvider provider,
+  ) {
     return Row(
       children: [
         Container(
@@ -149,7 +153,7 @@ class _CartScreenState extends State<CartScreen> with ProdutsMixin {
             ),
             const SizedBox(height: 5),
             Text(
-              "\$${product.price}",
+              "\$${product.price!.toStringAsFixed(2)}",
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

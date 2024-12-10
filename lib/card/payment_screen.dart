@@ -536,42 +536,47 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
       backgroundColor: CustomColors.snow,
       context: context,
       builder: (context) {
-        return DraggableScrollableSheet(
-            snap: true,
-            expand: false,
-            initialChildSize: 0.7,
-            builder: (context, controller) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Payment",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+        return StatefulBuilder(
+          builder: (context, state) {
+            return DraggableScrollableSheet(
+              snap: true,
+              expand: false,
+              initialChildSize: 0.7,
+              builder: (context, controller) {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Payment",
+                          style: TextStyle(
+                            color: CustomColors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 40),
-                      paymentMethod(),
-                      const SizedBox(height: 30),
-                      address(),
-                      const SizedBox(height: 250),
-                      totalBag(),
-                      const SizedBox(height: 20),
-                      payButton(),
-                    ],
+                        const SizedBox(height: 40),
+                        paymentMethod(state),
+                        const SizedBox(height: 30),
+                        address(),
+                        const SizedBox(height: 250),
+                        totalBag(selecInstallments),
+                        const SizedBox(height: 20),
+                        payButton(),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            });
+                );
+              },
+            );
+          },
+        );
       },
     );
   }
 
-  Widget paymentMethod() {
+  Widget paymentMethod(Function state) {
     return ExpansionTile(
       shape: Border.all(
         color: CustomColors.black,
@@ -588,26 +593,20 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
           Text("Payment method"),
         ],
       ),
-      children: [
-        installment(1),
-        installment(2),
-        installment(3),
-        installment(4),
-        installment(5),
-        installment(6),
-        installment(7),
-        installment(8),
-        installment(9),
-        installment(10),
-        installment(11),
-        installment(12),
-      ],
+      children: List.generate(
+        12,
+        (index) => installment(index + 1, state),
+      ),
     );
   }
 
-  Widget installment(int number) {
+  Widget installment(int number, Function state) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        state(() {
+          selecInstallments = number;
+        });
+      },
       child: Row(
         children: [
           Text(
@@ -641,6 +640,8 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
               fontWeight: FontWeight.bold,
             ),
           ),
+          const SizedBox(width: 10),
+          selecInstallments == number ? const Icon(Icons.check) : Container(),
         ],
       ),
     );
@@ -795,7 +796,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Widget totalBag() {
+  Widget totalBag(int number) {
     return Row(
       children: [
         const Text(
@@ -807,7 +808,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
         ),
         const Spacer(),
         Text(
-          "\$${widget.totalPrice!.toStringAsFixed(2)}",
+          "${number}X of \$${(widget.totalPrice! / number).toStringAsFixed(2)}",
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

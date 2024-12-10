@@ -11,6 +11,7 @@ mixin ProdutsMixin<T extends StatefulWidget> on State<T> {
   final double shipPrice = 5.0;
   bool isChecked = false;
   String check = "";
+  int selecInstallments = 1;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
