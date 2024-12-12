@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_store_app/mixin/products_mixin.dart";
+import "package:flutter_store_app/payment_completed/payment_completed.dart";
 import "package:flutter_store_app/provider/card_provider.dart";
 import "package:flutter_store_app/provider/cart_provider.dart";
 import "package:flutter_store_app/utils/colors.dart";
@@ -555,9 +556,12 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
                           ),
                         ),
                         const SizedBox(height: 40),
-                        paymentMethod(state, cardProvider.currentCard),
+                        paymentMethod(
+                          state,
+                          cardProvider.currentCard,
+                        ),
                         const SizedBox(height: 30),
-                        address(),
+                        address(cardProvider),
                         const SizedBox(height: 250),
                         totalBag(selecInstallments),
                         const SizedBox(height: 20),
@@ -574,9 +578,12 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Widget paymentMethod(Function state, Map<String, dynamic> currentCard) {
+  Widget paymentMethod(
+    Function state,
+    Map<String, dynamic> currentCard,
+  ) {
     String cardNumber = currentCard["number"];
-    print(cardNumber.length);
+
     String fourDigits = cardNumber.substring(cardNumber.length - 4);
     return ExpansionTile(
       shape: Border.all(
@@ -648,7 +655,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Widget address() {
+  Widget address(CardProvider cardProvider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -665,10 +672,10 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
             color: CustomColors.black,
           ),
         ),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Delivery Address",
               style: TextStyle(
                 color: CustomColors.black,
@@ -676,16 +683,25 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
-              "Street sout america / Brazil, 123",
-              style: TextStyle(
-                color: CustomColors.black,
-              ),
-            ),
+            cardProvider.currentAddress.isNotEmpty
+                ? Text(
+                    "${cardProvider.currentAddress["street"]} /"
+                    " ${cardProvider.currentAddress["country"]}, "
+                    "${cardProvider.currentAddress["number"]}",
+                    style: const TextStyle(
+                      color: CustomColors.black,
+                    ),
+                  )
+                : const Text(
+                    "add a address",
+                    style: TextStyle(
+                      color: CustomColors.black,
+                    ),
+                  ),
           ],
         ),
         InkWell(
-          onTap: () => addressDialog(),
+          onTap: () => addressDialog(cardProvider),
           child: Container(
             height: 50,
             width: 50,
@@ -704,7 +720,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
     );
   }
 
-  Future addressDialog() {
+  Future addressDialog(CardProvider cardProvider) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -735,7 +751,17 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
                   SizedBox(
                     width: mediaWidth * 0.6,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        cardProvider.newAddress(
+                          {
+                            "street": streetController.text,
+                            "number": houseNumController.text,
+                            "city": cityController.text,
+                            "country": countryController.text,
+                          },
+                        );
+                        Navigator.pop(context);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomColors.sage,
                       ),
@@ -830,7 +856,7 @@ class _PaymentScreenState extends State<PaymentScreen> with ProdutsMixin {
             style: ElevatedButton.styleFrom(
               backgroundColor: CustomColors.limedAsh,
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, PaymentCompleted.tag),
             child: const Text(
               "Buy now",
               style: TextStyle(

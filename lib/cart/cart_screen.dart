@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_store_app/card/payment_screen.dart';
+import 'package:flutter_store_app/payment/payment_screen.dart';
 import 'package:flutter_store_app/mixin/products_mixin.dart';
 import 'package:flutter_store_app/model/cart_model.dart';
 import 'package:flutter_store_app/provider/cart_provider.dart';

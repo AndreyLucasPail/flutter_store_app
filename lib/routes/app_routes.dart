@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_store_app/card/payment_screen.dart';
+import 'package:flutter_store_app/payment/payment_screen.dart';
 import 'package:flutter_store_app/cart/cart_screen.dart';
 import 'package:flutter_store_app/home/home_screen.dart';
+import 'package:flutter_store_app/payment_completed/payment_completed.dart';
 import 'package:flutter_store_app/product_screen/product_screen.dart';
 import 'package:flutter_store_app/splash/splash_screen.dart';
 
@@ -30,6 +31,8 @@ class AppRoutes {
       case PaymentScreen.tag:
         PaymentScreenArgs args = settings.arguments as PaymentScreenArgs;
         return PaymentScreen(totalPrice: args.totalPrice);
+      case PaymentCompleted.tag:
+        return const PaymentCompleted();
       default:
         return null;
     }
